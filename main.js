@@ -153,6 +153,61 @@
 		soundManager.play('chanson');
 	}
 
+	function record(){
+		// success callback when requesting audio input stream
+		function gotStream(stream) {
+			window.AudioContext = window.AudioContext || window.webkitAudioContext;
+			var audioContext = new AudioContext();
+
+			// Create an AudioNode from the stream.
+			var mediaStreamSource = audioContext.createMediaStreamSource( stream );
+
+			// Add analyzer between
+			var analyzer = audioContext.createAnalyser();
+
+			// Connect it to the destination to hear yourself (or any other node for processing!)
+			mediaStreamSource.connect( analyzer );
+			analyzer.connect( audioContext.destination );
+
+			setInterval(function(){
+				var freqByteData = new Uint8Array(analyzer.frequencyBinCount);
+				analyzer.getByteFrequencyData(freqByteData);
+
+
+				var canvas = document.getElementById('canvas');
+				var ctx = canvas.getContext('2d');
+				var width = canvas.width;
+				var height = canvas.height;
+				var bar_width = 10;
+
+				ctx.clearRect(0, 0, width, height);
+
+				var freqByteData = new Uint8Array(analyzer.frequencyBinCount);
+				analyzer.getByteFrequencyData(freqByteData);
+
+				var barCount = Math.round(width / bar_width);
+				for (var i = 0; i < barCount; i++) {
+					var magnitude = freqByteData[i];
+					// some values need adjusting to fit on the canvas
+					ctx.fillRect(bar_width * i, height, bar_width - 2, -magnitude + 60);
+				}
+				/*
+				var max = freqByteData.length;
+				for (var i = 0; i < max; i++) {
+					if(freqByteData[i] != 0){
+						var freq = freqByteData[i] * 44100/analyzer.fftSize;
+						if(freq >= 75 && freq <= 95){
+							console.log(freqByteData[i] * 44100/analyzer.fftSize);
+						}
+					}
+				};*/
+			}, 50);
+		}
+
+		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+		navigator.getUserMedia( {audio:true}, gotStream );
+	}
+
 	addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});
 	addEvent(document.getElementById('kick'), 'click', function(){soundManager.play('kick');});
 	addEvent(document.getElementById('ch'), 'click', function(){soundManager.play('ch');});
@@ -163,6 +218,8 @@
 	addEvent(document.getElementById('partitionTempoRandomv3'), 'click', function(){partitionTempoRandomv3();});
 
 	addEvent(document.getElementById('jouerChanson'), 'click', function(){jouerChanson();});
+
+	addEvent(document.getElementById('record'), 'click', function(){record();});
 }());
 
 /*
