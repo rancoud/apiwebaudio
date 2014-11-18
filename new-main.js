@@ -198,6 +198,6 @@
 
     addEvent(document.getElementById('record'), 'click', function(){record();});
 */
-    addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');debugger;});
+    addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});
 
 }());
