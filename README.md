@@ -1,10 +1,21 @@
 #TODO
- * generer une phrase musical  
-
- * ajouter 	un node avec des parameters  
- * modifier 	un node avec des parameters  
- * supprimer 	un node  
-
- * avoir la liste des nodes  
-
- * generer une phrase aléatoire
+- [ ] utiliser le SoundManager avec un seul son
+  - [ ] fonction play (play sound)
+  - [ ] fonction stop (stop sound)
+- [ ] creation du GainNode
+  - [ ] fonction init
+  - [ ] etc...
+- [ ] utiliser le TrackManager pour une gestion multinode
+  - [ ] fonction add (add node)
+  - [ ] fonction remove (remove node)
+  - [ ] fonction insert (insert node between anoters)
+  - [ ] fonction compile (check node connect)
+  - [ ] fonction connect (connect nodes)
+  - [ ] fonction getListNode (la liste des nodes)
+- [ ] le SoundManager doit lire un TrackManager
+  - [ ] fonction addTrackManager (add TrackManager)
+  - [ ] fonction removeTrackManager (remove TrackManager)
+  - [ ] fonction playTrack (play TrackManager)
+  - [ ] fonction stopTrack (stop TrackManager)
+- [ ] BONUS
+  - [ ] generer une phrase aléatoire musicale
