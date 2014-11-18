@@ -1,7 +1,7 @@
 (function() {
     "use strict";
     
-    var soundManager = new window.sound.SoundManager();
+    var soundManager = new window.SoundManager.SoundManager();
     if(soundManager.isAudioContextSupported() === false){
         window.console.log('isAudioContextSupported === false');
     }
@@ -10,15 +10,7 @@
     soundManager.loadSound('kick', 'sound/Kick 01.wav');
     soundManager.loadSound('ch', 'sound/CHH 02.wav');
     soundManager.loadSound('perk', 'sound/Perk 02.wav');
-
-    function addEvent(obj, event, fct) {
-        if (obj.attachEvent){
-            obj.attachEvent("on" + event, fct);
-        }else{
-            obj.addEventListener(event, fct, false);
-        }
-    }
-
+/*
     function partitionTempoRandom() {
         var sound = soundManager.getSounds(),
             tempo = getRandomInt(80, 200), // BPM (beats per minute)
@@ -113,21 +105,6 @@
         setTimeout(partitionTempoRandomv3, (startTime + 2 * 8 * eighthNoteTime)*1000);
     }
 
-    /**
-     * Returns a random integer between min and max
-     * Using Math.round() will give you a non-uniform distribution!
-     */
-    function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    /**
-     * Returns a random number between min and max
-     */
-    function getRandomFloat(min, max) {
-        return Math.random() * (max - min) + min;
-    }
-
     function drawSpectrum() {
         var canvas = document.getElementById('canvas');
         var ctx = canvas.getContext('2d');
@@ -190,7 +167,7 @@
                     // some values need adjusting to fit on the canvas
                     ctx.fillRect(bar_width * i, height, bar_width - 2, -magnitude + 60);
                 }
-                /*
+                /******
                 var max = freqByteData.length;
                 for (var i = 0; i < max; i++) {
                     if(freqByteData[i] != 0){
@@ -199,14 +176,15 @@
                             console.log(freqByteData[i] * 44100/analyzer.fftSize);
                         }
                     }
-                };*/
+                };******
             }, 50);
         }
 
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
         navigator.getUserMedia( {audio:true}, gotStream, function(){ console.log('mic not open') } );
     }
-
+*/
+/*
     addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});
     addEvent(document.getElementById('kick'), 'click', function(){soundManager.play('kick');});
     addEvent(document.getElementById('ch'), 'click', function(){soundManager.play('ch');});
@@ -219,18 +197,7 @@
     addEvent(document.getElementById('jouerChanson'), 'click', function(){jouerChanson();});
 
     addEvent(document.getElementById('record'), 'click', function(){record();});
-}());
-
-/*
-// can't addafter it
-soundManager.addNode('ReverbNode', 'boom1', {});
-
-soundManager.addNode('GainNode', 'boom1', {});
-soundManager.addNode('CompressorNode', 'boom1', {});
-soundManager.addNode('BiquadFilterNode', 'boom1', {});
-soundManager.addNode('PannerNode', 'boom1', {});
-
-// ERROR
-soundManager.addNode('DelayNode', 'boom1', {});
-soundManager.addNode('OscillatorNode', 'boom1', {});
 */
+    addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});
+
+}());
