@@ -122,7 +122,7 @@
             nodeTemp = [];
 
         sourceNode.buffer = sounds[soundName].buffer;
-        
+
         sourceNode.loop = (loopFlag === true);
 
         if (timeEnding !== undefined) {

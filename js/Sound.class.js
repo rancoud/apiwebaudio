@@ -2,14 +2,14 @@
 (function () {
     "use strict";
 
-    function Node() {
+    function Sound() {
     }
 
-    Node.prototype.prepare = function () {
+    Sound.prototype.prepare = function () {
     };
     
     if (window.SoundManager === undefined) {
         window.SoundManager = {};
     }
-    window.SoundManager.Node = Node;
+    window.SoundManager.Sound = Sound;
 }());
