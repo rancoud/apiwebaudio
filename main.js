@@ -10,7 +10,6 @@
 	soundManager.loadSound('kick', 'sound/Kick 01.wav');
 	soundManager.loadSound('ch', 'sound/CHH 02.wav');
 	soundManager.loadSound('perk', 'sound/Perk 02.wav');
-	soundManager.loadSound('chanson', 'sound/Busta Rhymes - Touch it.mp3');
 
 	function addEvent(obj, event, fct) {
 		if (obj.attachEvent){
@@ -205,7 +204,7 @@
 		}
 
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-		navigator.getUserMedia( {audio:true}, gotStream );
+		navigator.getUserMedia( {audio:true}, gotStream, function(){ console.log('mic not open') } );
 	}
 
 	addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});

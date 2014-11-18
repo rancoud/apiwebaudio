@@ -132,31 +132,33 @@
 
 		countItem = sounds[soundName].nodes.length;
 		if (countItem === 0) {
+/*
 			javascriptNode = self.getJavascriptNode();
 			javascriptNode.connect( audioContext.destination );
 			self.analyser = self.getAnalyzerNode();
 
-javascriptNode.onaudioprocess = function() {
-	var canvas = document.getElementById('canvas');
-	var ctx = canvas.getContext('2d');
-	var width = canvas.width;
-	var height = canvas.height;
-	var bar_width = 10;
+			javascriptNode.onaudioprocess = function() {
+				var canvas = document.getElementById('canvas');
+				var ctx = canvas.getContext('2d');
+				var width = canvas.width;
+				var height = canvas.height;
+				var bar_width = 10;
 
-	ctx.clearRect(0, 0, width, height);
+				ctx.clearRect(0, 0, width, height);
 
-	var freqByteData = new Uint8Array(self.analyser.frequencyBinCount);
-	self.analyser.getByteFrequencyData(freqByteData);
-	
-	var max = freqByteData.length;
-	for ( var i = 0; i < max; ++i ){
-		var value = freqByteData[i];
-		ctx.fillRect(i*5,600-value,3,600);
-	}
-}
+				var freqByteData = new Uint8Array(self.analyser.frequencyBinCount);
+				self.analyser.getByteFrequencyData(freqByteData);
+				
+				var max = freqByteData.length;
+				for ( var i = 0; i < max; ++i ){
+					var value = freqByteData[i];
+					ctx.fillRect(i*5,600-value,3,600);
+				}
+			}
+*/
 
-			sourceNode.connect(self.analyser);
-			self.analyser.connect(javascriptNode);
+			//sourceNode.connect(audioContext.destination);
+			//self.analyser.connect(javascriptNode);
 
 			sourceNode.connect(audioContext.destination);
 		}
@@ -175,7 +177,7 @@ javascriptNode.onaudioprocess = function() {
 			nodeTemp[countItem-1].connect( audioContext.destination );
 		}
 
-		sourceNode.noteOn( audioContext.currentTime + timeBegin );
+		sourceNode.start( audioContext.currentTime + timeBegin );
 	};
 
 	SoundManager.prototype.getJavascriptNode = function() {
