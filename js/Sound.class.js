@@ -2,7 +2,9 @@
 (function () {
     "use strict";
 
-    function Sound() {
+    function Sound(name, buffer) {
+    	this.name = name;
+    	this.buffer = buffer;
     }
 
     Sound.prototype.prepare = function () {

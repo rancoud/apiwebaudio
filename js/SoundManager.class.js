@@ -5,7 +5,8 @@
     var self = null,                        // instance pour le context
         audioContext,                       // objet de l'api audioContext
         audioContextSupported = false,      // boolean permettant de savoir si le navigateur supporte web audio api
-        sounds = {};                        // un objets contenant un ensemble de sons
+        sounds = [],                        // un tableau contenant une liste d'objet Sound
+        countSoundLoaded = 0;               // nombre de sons chargé
 
     function SoundManager() {
         // passage de l'instance courante à la variable globale de notre objet
@@ -46,13 +47,13 @@
     
     /**
      * Permet de récupérer la liste des sons
-     * @return {Array} true si support de l'api, false, si pas de support de l'api
+     * @return {Array} 
      */
-    SoundManager.prototype.getSounds = function() {
+    SoundManager.prototype.getSoundsName = function() {
         var soundsArray = [];
 
-        for (var name in sounds) {
-            soundsArray.push(name);
+        for (var i = 0; i < countSoundLoaded; i++) {
+            soundsArray.push(sounds[i].name);
         }
 
         return soundsArray;
@@ -62,8 +63,10 @@
      * Charge un son en requête XMLHttpRequest et le rajoute de manière asynchrone dans la variable globale sounds
      * @param  {String} name Label du son que l'on veut charger
      * @param  {String} url  Adresse à laquelle se trouve le son
+     * @param  {String} success  Callback pour le chargemenent fini
+     * @param  {String} error  Callback pour l'erreur
      */
-    SoundManager.prototype.loadSound = function(name, url) {
+    SoundManager.prototype.loadSound = function(name, url, success, error) {
         var request = new XMLHttpRequest();
 
         request.open("GET", url, true);
@@ -82,6 +85,13 @@
                             'buffer': buffer,
                             nodes: []
                         };
+                        
+                        sounds.push(new window.SoundManager.Sound(name, buffer));
+                        countSoundLoaded++;
+
+                        if(success){
+                            success();
+                        }
                     }
                 );
             }

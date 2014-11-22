@@ -1,15 +1,16 @@
 (function() {
     "use strict";
-    
+
     var soundManager = new window.SoundManager.SoundManager();
     if(soundManager.isAudioContextSupported() === false){
         window.console.log('isAudioContextSupported === false');
     }
 
-    soundManager.loadSound('snare', 'sound/Snare 06.wav');
-    soundManager.loadSound('kick', 'sound/Kick 01.wav');
-    soundManager.loadSound('ch', 'sound/CHH 02.wav');
-    soundManager.loadSound('perk', 'sound/Perk 02.wav');
+    soundManager.loadSound('snare', 'sound/Snare 06.wav', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('kick', 'sound/Kick 01.wav', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('ch', 'sound/CHH 02.wav', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('perk', 'sound/Perk 02.wav', function(){console.log(soundManager.getSoundsName());});
+
 /*
     function partitionTempoRandom() {
         var sound = soundManager.getSounds(),
