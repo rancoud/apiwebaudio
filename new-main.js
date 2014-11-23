@@ -7,9 +7,11 @@
     }
 
     soundManager.loadSound('snare', 'sound/Snare 06.wav', function(){console.log(soundManager.getSoundsName());});
-    soundManager.loadSound('kick', 'sound/Kick 01.wav', function(){console.log(soundManager.getSoundsName());});
-    soundManager.loadSound('ch', 'sound/CHH 02.wav', function(){console.log(soundManager.getSoundsName());});
-    soundManager.loadSound('perk', 'sound/Perk 02.wav', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('intro', 'music/intro.mp3', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('loop1', 'music/loop1.mp3', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('loop2', 'music/loop2.mp3', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('end', 'music/end.mp3', function(){console.log(soundManager.getSoundsName());});
+    soundManager.loadSound('toadman', 'music/toadman.mp3', function(){console.log(soundManager.getSoundsName());});
 
 /*
     function partitionTempoRandom() {
@@ -200,5 +202,15 @@
     addEvent(document.getElementById('record'), 'click', function(){record();});
 */
     addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});
+    addEvent(document.getElementById('intro'), 'click', function(){soundManager.play('intro');});
+    addEvent(document.getElementById('loop1'), 'click', function(){soundManager.play('loop1');});
+    addEvent(document.getElementById('loop2'), 'click', function(){soundManager.play('loop2');});
+    addEvent(document.getElementById('end'), 'click', function(){soundManager.play('end');});
+    addEvent(document.getElementById('toadman'), 'click', function(){soundManager.play('toadman');});
+
+    addEvent(document.getElementById('volume_100'), 'click', function(){soundManager.volume('loop1', 100);});
+    addEvent(document.getElementById('volume_50'), 'click', function(){soundManager.volume('loop1', 50);});
+    addEvent(document.getElementById('volume_0'), 'click', function(){soundManager.volume('loop1', 0);});
+    addEvent(document.getElementById('fade_in_intro'), 'click', function(){soundManager.fadeIn('intro');});
 
 }());

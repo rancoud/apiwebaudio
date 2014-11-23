@@ -80,15 +80,11 @@
                 audioContext.decodeAudioData(
                     request.response,
                     function(buffer) {
-                        // on rajoute dans la variable globale le label, une version decodée de l'audio, ainsi qu'un tableau vide de nodes
-                        sounds[name] = {
-                            'buffer': buffer,
-                            nodes: []
-                        };
-                        
-                        sounds.push(new window.SoundManager.Sound(name, buffer));
+                        // on rajoute dans la variable globale le label, une version decodée de l'audio
+                        sounds.push(new window.SoundManager.Sound(name, url, buffer));
                         countSoundLoaded++;
 
+                        //callback
                         if(success){
                             success();
                         }
@@ -96,42 +92,33 @@
                 );
             }
             else {
-                sounds[name] = {
-                    'buffer': '',
-                    nodes: []
-                };
+                sounds.push(new window.SoundManager.Sound(name, url, null));
+                countSoundLoaded++;
             }
         };
         request.send();
     };
 
     SoundManager.prototype.play = function(name, timeBegin, timeEnding, loopFlag) {
-        if (sounds.hasOwnProperty(name)) {
-            if (self.isAudioContextSupported() === true) {
-                self.playSound(name, timeBegin, timeEnding, loopFlag);
-            }
-            else {
-                //
+        if (self.isAudioContextSupported() === true) {
+            for (var i = 0; i < countSoundLoaded; i++) {
+                if(sounds[i].name == name){
+                    self.playSound(i, timeBegin, timeEnding, loopFlag);
+                }
             }
         }
         else {
-            console.log('???');
-            setTimeout(
-                function(){
-                    self.play(name, timeBegin, timeEnding, loopFlag);
-                },
-                500
-            );
+            //
         }
     };
 
-    SoundManager.prototype.playSound = function(soundName, timeBegin, timeEnding, loopFlag) {
+    SoundManager.prototype.playSound = function(soundIndice, timeBegin, timeEnding, loopFlag) {
         var sourceNode = audioContext.createBufferSource(),
             countItem,
             i,
             nodeTemp = [];
 
-        sourceNode.buffer = sounds[soundName].buffer;
+        sourceNode.buffer = sounds[soundIndice].buffer;
 
         sourceNode.loop = (loopFlag === true);
 
@@ -139,13 +126,13 @@
             sourceNode.noteOff( audioContext.currentTime + timeEnding );
         }
 
-        countItem = sounds[soundName].nodes.length;
-        if (countItem === 0) {
+        /*countItem = sounds[soundIndice].nodes.length;
+        if (countItem === 0) {*/
             sourceNode.connect(audioContext.destination);
-        }
+        /*}
         else {
             for (i = 0; i < countItem; i = i+1) {
-                nodeTemp[i] = self.getNode(sounds[soundName].nodes[i][0],sounds[soundName].nodes[i][1]);
+                nodeTemp[i] = self.getNode(sounds[soundIndice].nodes[i][0],sounds[soundIndice].nodes[i][1]);
 
                 if (i === 0) {
                     sourceNode.connect(nodeTemp[i]);
@@ -156,7 +143,7 @@
             }
 
             nodeTemp[countItem-1].connect(audioContext.destination);
-        }
+        }*/
 
         sourceNode.start(audioContext.currentTime + timeBegin);
     };
