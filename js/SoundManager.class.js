@@ -5,8 +5,9 @@
     var self = null,                        // instance pour le context
         audioContext,                       // objet de l'api audioContext
         audioContextSupported = false,      // boolean permettant de savoir si le navigateur supporte web audio api
-        sounds = [],                        // un tableau contenant une liste d'objet Sound
-        countSoundLoaded = 0;               // nombre de sons chargé
+        tracks = [],                        // un tableau contenant une liste d'objet Sound
+        countSoundLoaded = 0,               // nombre de sons chargé
+        gainNode = undefined;               // controle du volume general
 
     function SoundManager() {
         // passage de l'instance courante à la variable globale de notre objet
@@ -34,6 +35,8 @@
         }
 
         // api web audio supportée, la variable audioContext est initialisé
+        window.SoundManager.audioContext = audioContext;
+        this.gainNode = new window.SoundManager.GainNode(); 
         return true;
     };
 
@@ -53,7 +56,7 @@
         var soundsArray = [];
 
         for (var i = 0; i < countSoundLoaded; i++) {
-            soundsArray.push(sounds[i].name);
+            soundsArray.push(tracks[i].sound.name);
         }
 
         return soundsArray;
@@ -81,19 +84,19 @@
                     request.response,
                     function(buffer) {
                         // on rajoute dans la variable globale le label, une version decodée de l'audio
-                        sounds.push(new window.SoundManager.Sound(name, url, buffer));
+                        var sound = new window.SoundManager.Sound(name, url, buffer);
+                        tracks.push(new window.SoundManager.TrackManager(sound));
                         countSoundLoaded++;
 
                         //callback
-                        if(success){
+                        if (success) {
                             success();
                         }
                     }
                 );
             }
             else {
-                sounds.push(new window.SoundManager.Sound(name, url, null));
-                countSoundLoaded++;
+                // TODO : FALLBACK
             }
         };
         request.send();
@@ -102,13 +105,13 @@
     SoundManager.prototype.play = function(name, timeBegin, timeEnding, loopFlag) {
         if (self.isAudioContextSupported() === true) {
             for (var i = 0; i < countSoundLoaded; i++) {
-                if(sounds[i].name == name){
+                if (tracks[i].sound.name == name) {
                     self.playSound(i, timeBegin, timeEnding, loopFlag);
                 }
             }
         }
         else {
-            //
+            // TODO : FALLBACK
         }
     };
 
@@ -118,17 +121,21 @@
             i,
             nodeTemp = [];
 
-        sourceNode.buffer = sounds[soundIndice].buffer;
+        timeBegin = timeBegin || 0;
+
+        sourceNode.buffer = tracks[soundIndice].sound.buffer;
 
         sourceNode.loop = (loopFlag === true);
 
         if (timeEnding !== undefined) {
-            sourceNode.noteOff( audioContext.currentTime + timeEnding );
+            sourceNode.stop(audioContext.currentTime + timeEnding);
         }
 
         /*countItem = sounds[soundIndice].nodes.length;
         if (countItem === 0) {*/
-            sourceNode.connect(audioContext.destination);
+            //sourceNode.connect(audioContext.destination);
+            tracks[soundIndice].computeNodes(sourceNode).connect(this.gainNode.node);
+            this.gainNode.node.connect(audioContext.destination);
         /*}
         else {
             for (i = 0; i < countItem; i = i+1) {
@@ -146,6 +153,19 @@
         }*/
 
         sourceNode.start(audioContext.currentTime + timeBegin);
+    };
+
+    SoundManager.prototype.setVolume = function(soundName, volumeValue) {
+        if (self.isAudioContextSupported() === true) {
+            for (var i = 0; i < countSoundLoaded; i++) {
+                if (tracks[i].sound.name == soundName) {
+                    tracks[i].setVolume(volumeValue);
+                }
+            }
+        }
+        else {
+            // TODO : FALLBACK
+        }
     };
 
     if (window.SoundManager === undefined) {

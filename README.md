@@ -1,3 +1,9 @@
+#POSTULAT
+- Un son est directement encapsulé dans un TrackManager
+- le SoundManager lit un ensemble de TrackManager
+- les nodes sont tous branchés sur le TrackManager
+- les nodes sont modifiés de manière temporel
+
 #TODO
 - [ ] utiliser le SoundManager avec un seul son
   - [ ] fonction play (play sound)

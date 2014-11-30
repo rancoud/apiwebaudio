@@ -6,11 +6,8 @@
         this.name = name;
         this.url = url;
         this.buffer = buffer;
-        this.options = {};
-
-        this.sourceNode = undefined;
     }
-
+/*
     Sound.prototype.play = function (audioContext, timeBegin, timeEnding, loopFlag) {
         this.sourceNode = audioContext.createBufferSource();
 
@@ -35,7 +32,7 @@
 
     Sound.prototype.isPlayed = function () {
     };
-    
+*/
     if (window.SoundManager === undefined) {
         window.SoundManager = {};
     }

@@ -3,12 +3,16 @@
     "use strict";
 
     function GainNode() { 
-        SoundManager.NodeManager.call(this);
+        SoundManager.Node.call(this);
+        this.node = window.SoundManager.audioContext.createGain();
+
+        this.setVolume(1);
     }
 
     GainNode.prototype = Object.create(SoundManager.Node.prototype);
 
-    GainNode.prototype.beforeTransitionShow = function () {
+    GainNode.prototype.setVolume = function (volumeValue) {
+        this.node.gain.value = volumeValue;
     };
 
     if (window.SoundManager === undefined) {
