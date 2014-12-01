@@ -155,7 +155,16 @@
         sourceNode.start(audioContext.currentTime + timeBegin);
     };
 
-    SoundManager.prototype.setVolume = function(soundName, volumeValue) {
+    SoundManager.prototype.setGeneralVolume = function(volumeValue) {
+        if (self.isAudioContextSupported() === true) {
+            this.gainNode.setVolume(volumeValue);
+        }
+        else {
+            // TODO : FALLBACK
+        }
+    };
+
+    SoundManager.prototype.setSoundVolume = function(soundName, volumeValue) {
         if (self.isAudioContextSupported() === true) {
             for (var i = 0; i < countSoundLoaded; i++) {
                 if (tracks[i].sound.name == soundName) {
@@ -166,6 +175,10 @@
         else {
             // TODO : FALLBACK
         }
+    };
+
+    SoundManager.prototype.addTrackManager = function(trackManager) {
+        tracks.push(trackManager);
     };
 
     if (window.SoundManager === undefined) {
