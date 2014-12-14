@@ -136,6 +136,11 @@
             //sourceNode.connect(audioContext.destination);
             tracks[soundIndice].computeNodes(sourceNode).connect(this.gainNode.node);
             this.gainNode.node.connect(audioContext.destination);
+            // le mettre sur le sound ou sur le track ? ou les deux par ordre ?
+            // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
+            sourceNode.onended = function() {
+                console.log('source ended event');
+            }
         /*}
         else {
             for (i = 0; i < countItem; i = i+1) {
