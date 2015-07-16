@@ -110,7 +110,8 @@
         if (self.isAudioContextSupported() === true) {
             for (var i = 0; i < countSoundLoaded; i++) {
                 if (tracks[i].sound.name == name) {
-                    self.playSound(i, timeBegin, timeEnding, loopFlag);
+                    tracks[i].play(timeBegin, timeEnding, loopFlag);
+                    //self.playSound(i, timeBegin, timeEnding, loopFlag);
                 }
             }
         }
@@ -141,7 +142,7 @@
     };
 
     SoundManager.prototype.playSound = function(soundIndice, timeBegin, timeEnding, loopFlag) {
-        var sourceNode = audioContext.createBufferSource(),
+        /*var sourceNode = audioContext.createBufferSource(),
             countItem,
             i,
             nodeTemp = [];
@@ -155,35 +156,35 @@
 
         if (timeEnding !== undefined) {
             sourceNode.stop(audioContext.currentTime + timeEnding);
-        }
-
-        /*countItem = sounds[soundIndice].nodes.length;
-        if (countItem === 0) {*/
-            //sourceNode.connect(audioContext.destination);
-            tracks[soundIndice].computeNodes(sourceNode).connect(this.gainNode.node);
-            this.gainNode.node.connect(audioContext.destination);
-            // le mettre sur le sound ou sur le track ? ou les deux par ordre ?
-            // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
-            sourceNode.onended = function() {
-                tracks[soundIndice].sound.callEndSound();
-            }
-        /*}
-        else {
-            for (i = 0; i < countItem; i = i+1) {
-                nodeTemp[i] = self.getNode(sounds[soundIndice].nodes[i][0],sounds[soundIndice].nodes[i][1]);
-
-                if (i === 0) {
-                    sourceNode.connect(nodeTemp[i]);
-                }
-                else {
-                    nodeTemp[i-1].connect(nodeTemp[i]);
-                }
-            }
-
-            nodeTemp[countItem-1].connect(audioContext.destination);
         }*/
 
-        sourceNode.start(audioContext.currentTime + timeBegin);
+        //countItem = sounds[soundIndice].nodes.length;
+        //if (countItem === 0) {
+        //    //sourceNode.connect(audioContext.destination);
+        //    tracks[soundIndice].computeNodes(sourceNode).connect(this.gainNode.node);
+        //    this.gainNode.node.connect(audioContext.destination);
+        //    // le mettre sur le sound ou sur le track ? ou les deux par ordre ?
+        //    // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
+        //    sourceNode.onended = function() {
+        //        tracks[soundIndice].sound.callEndSound();
+        //    }
+        //}
+        //else {
+        //    for (i = 0; i < countItem; i = i+1) {
+        //        nodeTemp[i] = self.getNode(sounds[soundIndice].nodes[i][0],sounds[soundIndice].nodes[i][1]);
+        //        //
+        //        if (i === 0) {
+        //            sourceNode.connect(nodeTemp[i]);
+        //        }
+        //        else {
+        //            nodeTemp[i-1].connect(nodeTemp[i]);
+        //        }
+        //    }
+        //    //
+        //    nodeTemp[countItem-1].connect(audioContext.destination);
+        //}
+
+        //sourceNode.start(audioContext.currentTime + timeBegin);
     };
 
     SoundManager.prototype.setGeneralVolume = function(volumeValue) {

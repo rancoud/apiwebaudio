@@ -2,12 +2,30 @@
 (function(){
     "use strict";
 
-    function TrackManager(sound) { 
+    function TrackManager(sound, soundManager) { 
         this.sound = sound;
         this.nodeList = [];
+        this.soundManager = soundManager;
 
         this.addNode(new window.SoundManager.GainNode());
     }
+
+    TrackManager.prototype.play = function (timeBegin, timeEnding, loopFlag) {
+        var sourceNode = this.soundManager.audioContext.createBufferSource();
+
+        timeBegin = timeBegin || 0;
+
+        sourceNode.buffer = this.sound.buffer;
+        this.sound.sourcesNodes.push(sourceNode);
+
+        sourceNode.loop = (loopFlag === true);
+
+        if (timeEnding !== undefined) {
+            sourceNode.stop(this.soundManager.audioContext.currentTime + timeEnding);
+        }
+
+        sourceNode.start(audioContext.currentTime + timeBegin);
+    };
 
     TrackManager.prototype.addNode = function (node) {
         this.nodeList.push(node);
