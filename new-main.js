@@ -201,6 +201,8 @@
 
     addEvent(document.getElementById('record'), 'click', function(){record();});
 */
+    addEvent(document.getElementById('stop'), 'click', function(){soundManager.stop();});
+
     addEvent(document.getElementById('snare'), 'click', function(){soundManager.play('snare');});
     addEvent(document.getElementById('intro'), 'click', function(){soundManager.play('intro');});
     addEvent(document.getElementById('loop1'), 'click', function(){soundManager.play('loop1');});

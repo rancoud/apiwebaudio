@@ -37,7 +37,7 @@
         // api web audio supportée, la variable audioContext est initialisé
         window.SoundManager.audioContext = audioContext;
         this.gainNode = new window.SoundManager.GainNode(); 
-        return true;
+        return false;
     };
 
     /**
@@ -78,7 +78,7 @@
 
         // calback de la requête en asynchrone
         request.onload = function() {
-            if (self.isAudioContextSupported) {
+            if (self.isAudioContextSupported() === true) {
                 // au moment de la réponse on demande au contexte de décoder l'audio
                 audioContext.decodeAudioData(
                     request.response,
@@ -88,7 +88,7 @@
                         tracks.push(new window.SoundManager.TrackManager(sound));
                         countSoundLoaded++;
 
-                        //callback
+                        // CALLBACK
                         if (success) {
                             success();
                         }
@@ -96,7 +96,11 @@
                 );
             }
             else {
-                // TODO : FALLBACK
+                // FALLBACK
+                var sound = new window.SoundManager.Sound(name, url);
+                sound.setAudioFallback(true);
+                tracks.push(sound);
+                countSoundLoaded++;
             }
         };
         request.send();
@@ -111,7 +115,28 @@
             }
         }
         else {
-            // TODO : FALLBACK
+            // FALLBACK
+            for (var i = 0; i < countSoundLoaded; i++) {
+                if (tracks[i].name == name) {
+                    tracks[i].audioFallback.currentTime = 0;
+                    tracks[i].audioFallback.play();
+                }
+            }
+        }
+    };
+
+    SoundManager.prototype.stop = function() {
+        if (self.isAudioContextSupported() === true) {
+            for (var i = 0; i < countSoundLoaded; i++) {
+                tracks[i].sound.stop();
+            }
+        }
+        else {
+            // FALLBACK
+            for (var i = 0; i < countSoundLoaded; i++) {
+                tracks[i].audioFallback.pause();
+                tracks[i].audioFallback.currentTime = 0;
+            }
         }
     };
 
@@ -124,6 +149,7 @@
         timeBegin = timeBegin || 0;
 
         sourceNode.buffer = tracks[soundIndice].sound.buffer;
+        tracks[soundIndice].sound.sourcesNodes.push(sourceNode);
 
         sourceNode.loop = (loopFlag === true);
 
@@ -139,7 +165,7 @@
             // le mettre sur le sound ou sur le track ? ou les deux par ordre ?
             // https://developer.mozilla.org/en-US/docs/Web/API/AudioContext
             sourceNode.onended = function() {
-                console.log('source ended event');
+                tracks[soundIndice].sound.callEndSound();
             }
         /*}
         else {

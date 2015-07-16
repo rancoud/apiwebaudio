@@ -6,7 +6,48 @@
         this.name = name;
         this.url = url;
         this.buffer = buffer;
+        this.sourcesNodes = [];
+        this.endSound = undefined;
+        this.audioFallback = undefined;
     }
+
+    Sound.prototype.stop = function () {
+        for (var i = 0, max = this.sourcesNodes.length; i < max; i++) {
+            this.sourcesNodes[i].stop();
+        };
+        this.sourcesNodes = [];
+    };
+
+    Sound.prototype.callEndSound = function () {
+        if(this.endSound !== undefined) {
+            this.endSound();
+        }
+    };
+
+    Sound.prototype.setEndSound = function (endSound) {
+        this.endSound = endSound;
+    };
+
+    Sound.prototype.setAudioFallback = function (useFallback) {
+        if(useFallback !== true) {
+            return;
+        }
+
+        this.audioFallback = document.createElement('audio');
+        this.audioFallback.setAttribute('src', this.url); 
+        this.audioFallback.setAttribute('preload', 'auto');
+    };
+
+    if (window.SoundManager === undefined) {
+        window.SoundManager = {};
+    }
+    window.SoundManager.Sound = Sound;
+}());
+
+
+
+
+
 /*
     Sound.prototype.play = function (audioContext, timeBegin, timeEnding, loopFlag) {
         this.sourceNode = audioContext.createBufferSource();
@@ -33,8 +74,3 @@
     Sound.prototype.isPlayed = function () {
     };
 */
-    if (window.SoundManager === undefined) {
-        window.SoundManager = {};
-    }
-    window.SoundManager.Sound = Sound;
-}());
